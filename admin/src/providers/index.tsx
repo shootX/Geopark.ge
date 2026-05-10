@@ -1,0 +1,31 @@
+'use client';
+
+import * as React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ToastProvider } from '@/components/ui/toast';
+import { ThemeProvider } from '@/providers/theme-provider';
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  const [queryClient] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: 1,
+            refetchOnWindowFocus: false,
+            staleTime: 30000,
+          },
+        },
+      })
+  );
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+}
